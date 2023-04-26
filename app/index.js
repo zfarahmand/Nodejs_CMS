@@ -28,7 +28,7 @@ module.exports = class Aplication {
     SetConfig() {
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
-        app.set('views', path.resolve('app/resource/views'));
+        app.set('views', path.resolve('resource/views'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         // app.use(validator()); => depricated
