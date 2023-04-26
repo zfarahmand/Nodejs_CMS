@@ -17,10 +17,7 @@ module.exports = class Aplication {
     constructor() {
         this.SetupExpress();
         this.SetConfig();
-
-        app.get('/', (req, res) => {
-            res.json('hello world!');
-        });
+        this.SetRouters();
     }
 
     SetupExpress() {
@@ -31,7 +28,7 @@ module.exports = class Aplication {
     SetConfig() {
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
-        app.set('views', path.resolve('./resource/views'));
+        app.set('views', path.resolve('app/resource/views'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         // app.use(validator()); => depricated
@@ -47,5 +44,10 @@ module.exports = class Aplication {
         }));
         app.use(cookieParser(process.env.SECRET_KEY));
         app.use(flash());
+    }
+
+    SetRouters() {
+        app.use(require('app/routes/api'));
+        app.use(require('app/routes/web'));
     }
 }
