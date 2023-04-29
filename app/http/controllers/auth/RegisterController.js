@@ -28,12 +28,12 @@ class RegisterController extends Controller {
 
     UserRegisterationRules(body) {
         return [
-            body('name').notEmpty().withMessage('فیلد نام کاربری نمیتواند خالی باشد'),
-            body('name').isLength({ min: 6 }).withMessage('فیلد نام کاربری نمیتواند کمتر از 6 کارکتر باشد'),
-            body('email').notEmpty().withMessage('فیلد ایمیل  نمیتواند خالی باشد'),
-            body('email').isEmail().withMessage(' ایمیل وارد شده اشتباه است '),
-            body('password').notEmpty().withMessage('فیلد کلمه عبور نمیتواند خالی باشد'),
-            body('password').isLength({ min: 8 }).withMessage('کلمه عبور نباید کمتر از 8 کاراکتر باشد')
+            body('name').notEmpty().withMessage(this.lang.name_empty),
+            body('name').isLength({ min: 6 }).withMessage(this.lang.name_short),
+            body('email').notEmpty().withMessage(this.lang.email_empty),
+            body('email').isEmail().withMessage(this.lang.email_invalid),
+            body('password').notEmpty().withMessage(this.lang.password_empty),
+            body('password').isLength({ min: 8 }).withMessage(this.lang.password_short)
         ]
     }
 

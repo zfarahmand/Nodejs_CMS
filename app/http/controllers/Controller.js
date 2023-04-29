@@ -7,6 +7,7 @@ module.exports = class Controller {
         autoBind(this);
         this.displayTag = arcaptcha.display_tag();
         this.captchaDisplayDOM = arcaptcha.displayCaptcha(process.env.ARC_SITE_KEY);
+        this.lang = require('lang/fa.json');
     }
 
     ValidateCaptcha(req) {
@@ -17,7 +18,7 @@ module.exports = class Controller {
                     resolve(true);
                 }
                 else {
-                    const error = 'پاسخ کپچا نامعتبر است.';
+                    const error = this.lang.captcha_invalid;
                     req.flash('errors', [error]);
                     reject(error);
                 }
