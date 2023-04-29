@@ -9,11 +9,11 @@
                     </div>
                     <div class="card-body">
                         <form action="/register" class="form-horizontal" method="POST" novalidate>
-                            <% if(errors.length > 0) { %>
+                            <% if(errors.length> 0) { %>
                                 <div class="alert alert-danger alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"
                                         aria-label="Close"></button>
-                                    <% errors.forEach(error => { %>
+                                    <% errors.forEach(error=> { %>
                                         <%= error %></br>
                                             <% }); %>
                                 </div>
@@ -37,6 +37,10 @@
                                             required="">
                                     </div>
 
+                                    <div class="col-12 mb-2">
+                                        <%- captchaDisplayDOM %>
+                                    </div>
+
                                     <div class="col-12 mt-3">
                                         <button type="submit" class="btn btn-primary">عضویت</button>
                                     </div>
@@ -47,4 +51,5 @@
         </div>
     </div>
 
-    <%- include('./../partials/footer') -%>
+    <%- displayTag %>
+        <%- include('./../partials/footer') -%>

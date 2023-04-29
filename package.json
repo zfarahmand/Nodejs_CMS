@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "arcaptcha-nodejs": "^1.0.7",
     "auto-bind": "^1.2.0",
     "body-parser": "^1.20.2",
     "connect-flash": "^0.1.1",
@@ -23,6 +24,7 @@
     "dotenv": "^16.0.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-recaptcha": "^5.1.0",
     "express-session": "^1.17.3",
     "express-validator": "^7.0.1",
     "mongoose": "^7.0.5",

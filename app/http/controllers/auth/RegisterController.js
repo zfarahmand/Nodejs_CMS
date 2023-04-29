@@ -1,17 +1,28 @@
 const Controller = require('app/http/controllers/Controller');
 
+let errorMessages = [];
+
 
 class RegisterController extends Controller {
+
     ShowRegisterationForm(req, res) {
-        res.render('auth/register', { errors: req.flash('errors') });
+        res.render('auth/register', {
+            errors: req.flash('errors'),
+            displayTag: this.displayTag,
+            captchaDisplayDOM: this.captchaDisplayDOM,
+        });
     }
 
     RegisterProcess(req, res, next, validationResult) {
-        this.ValidateRegisteration(req, validationResult).then(() => {
-            res.redirect('/login');
-            // registeration logic
-        }).catch((errors) => {
-            res.redirect('/register');
+        this.ValidateCaptcha(req).then(() => {
+            this.ValidateRegisteration(req, validationResult).then(() => {
+                res.redirect('/login');
+                // registeration logic
+            }).catch((errors) => {
+                res.redirect(req.url);
+            });
+        }).catch((error) => {
+            res.redirect(req.url);
         });
     }
 
@@ -26,15 +37,16 @@ class RegisterController extends Controller {
         ]
     }
 
+
     ValidateRegisteration(req, validationResult) {
         let promise = new Promise((resolve, reject) => {
             const result = validationResult(req);
             if (result) {
                 if (result.isEmpty()) {
+
                     resolve(result);
                 }
                 else {
-                    const errorMessages = [];
                     result.errors.forEach(error => errorMessages.push(error.msg));
 
                     req.flash('errors', errorMessages);
