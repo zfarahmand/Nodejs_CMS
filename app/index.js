@@ -4,7 +4,6 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const { validator } = require('express-validator');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
@@ -31,11 +30,6 @@ module.exports = class Aplication {
         app.set('views', path.resolve('resource/views'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
-        // app.use(validator()); => depricated
-        // new usage: 
-        // app.get('/hello', validator('person').notEmpty(), (req, res) => {
-        //     res.send(`Hello, ${req.validator.person}!`);
-        //   });
         app.use(session({
             secret: process.env.SECRET_KEY,
             resave: true,
