@@ -25,6 +25,8 @@ module.exports = class Aplication {
     }
 
     SetConfig() {
+        mongoose.connect(process.env.MONGO_URL);
+        require('app/passport/passport-local');
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
         app.set('views', path.resolve('resource/views'));
@@ -33,11 +35,16 @@ module.exports = class Aplication {
         app.use(session({
             secret: process.env.SECRET_KEY,
             resave: true,
+            cookie: {
+                expires: new Date(Date.now() + 7*24*60*60*1000)
+            },
             saveUninitialized: true,
             store: MongoStore.create({mongoUrl: process.env.MONGO_URL})
         }));
         app.use(cookieParser(process.env.SECRET_KEY));
         app.use(flash());
+        app.use(passport.initialize());
+        app.use(passport.session());
     }
 
     SetRouters() {

@@ -12,6 +12,9 @@ const { body, validationResult } = require('express-validator');
 
 router.get('/', homeController.index);
 router.get('/login', loginController.ShowLoginForm);
+router.post('/login' , loginController.UserLoginRules(body) , (req , res , next) => {
+    loginController.LoginProcess(req , res , next , validationResult);
+});
 router.get('/register', registerController.ShowRegisterationForm);
 router.post('/register', registerController.UserRegisterationRules(body) , (req , res , next) => {
     registerController.RegisterProcess(req , res , next , validationResult);

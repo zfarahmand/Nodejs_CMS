@@ -17,6 +17,7 @@
     "app-module-path": "^2.2.0",
     "arcaptcha-nodejs": "^1.0.7",
     "auto-bind": "^1.2.0",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.0.0",

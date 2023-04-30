@@ -1,4 +1,5 @@
 const Controller = require('app/http/controllers/Controller');
+const passport = require('passport');
 
 let errorMessages = [];
 
@@ -16,14 +17,21 @@ class RegisterController extends Controller {
     RegisterProcess(req, res, next, validationResult) {
         this.ValidateCaptcha(req).then(() => {
             this.ValidateRegisteration(req, validationResult).then(() => {
-                res.redirect('/login');
-                // registeration logic
+                this.Register(req , res, next);
             }).catch((errors) => {
                 res.redirect(req.url);
             });
         }).catch((error) => {
             res.redirect(req.url);
         });
+    }
+
+    Register(req , res , next) {
+        passport.authenticate('local.register' , {
+            successRedirect: '/',
+            failureRedirect: '/register',
+            failureFlash: true
+        })(req , res , next);
     }
 
     UserRegisterationRules(body) {
@@ -43,7 +51,6 @@ class RegisterController extends Controller {
             const result = validationResult(req);
             if (result) {
                 if (result.isEmpty()) {
-
                     resolve(result);
                 }
                 else {
