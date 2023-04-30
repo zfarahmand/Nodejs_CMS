@@ -36,7 +36,7 @@ module.exports = class Aplication {
             secret: process.env.SECRET_KEY,
             resave: true,
             cookie: {
-                expires: new Date(Date.now() + 7*24*60*60*1000)
+                expires: new Date(Date.now() + parseInt(process.env.SESSION_EXPIRE))
             },
             saveUninitialized: true,
             store: MongoStore.create({mongoUrl: process.env.MONGO_URL})
