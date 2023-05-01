@@ -15,22 +15,36 @@ class LoginController extends Controller {
 
     LoginProcess(req, res, next, validationResult) {
         this.ValidateCaptcha(req).then(() => {
-            this.ValidateLogin(req, validationResult).then(() => {
-                this.Login(req , res, next);
-            }).catch((errors) => {
-                res.redirect(req.url);
-            });
+        this.ValidateLogin(req, validationResult).then(() => {
+            this.Login(req, res, next);
+        }).catch((errors) => {
+            res.redirect(req.url);
+        });
         }).catch((error) => {
             res.redirect(req.url);
         });
     }
 
     Login(req, res, next) {
-        passport.authenticate('local.login', {
-            successRedirect: '/',
-            failureRedirect: '/login',
-            failureFlash: true
-        })(req, res, next);
+        passport.authenticate('local.login', (err , user) => {
+            if(user) {
+                if(req.body.remember) {
+                    user.setRememberToken(req , res);
+                }
+
+                req.login(user , (err) => {
+                    if(!err) {
+                        return res.redirect('/');
+                    }
+                    else {
+                        return res.redirect('/login')
+                    }
+                });
+            }
+            else {
+                return res.redirect('/login');
+            }
+        })(req , res , next);
     }
 
     UserLoginRules(body) {

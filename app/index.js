@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
 const Helpers = require('app/helpers');
+const RememberToken = require('app/http/middleware/RememberLogin');
 
 const app = express();
 
@@ -34,7 +35,7 @@ module.exports = class Aplication {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(session({
-            secret: process.env.SECRET_KEY,
+            secret: process.env.COOKIE_SECRET_KEY,
             resave: true,
             cookie: {
                 expires: new Date(Date.now() + parseInt(process.env.SESSION_EXPIRE))
@@ -42,10 +43,11 @@ module.exports = class Aplication {
             saveUninitialized: true,
             store: MongoStore.create({mongoUrl: process.env.MONGO_URL})
         }));
-        app.use(cookieParser(process.env.SECRET_KEY));
+        app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
         app.use(flash());
         app.use(passport.initialize());
         app.use(passport.session());
+        app.use(RememberToken.Handle);
         app.use((req , res , next) => {
             app.locals = new Helpers(req , res).GetObjects();
             next();
