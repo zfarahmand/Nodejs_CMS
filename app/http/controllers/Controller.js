@@ -1,5 +1,8 @@
 const autoBind = require('auto-bind');
+const { validationResult } = require('express-validator');
 const arcaptcha = require('arcaptcha-nodejs');
+
+let errorMessages = [];
 
 
 module.exports = class Controller {
@@ -24,5 +27,26 @@ module.exports = class Controller {
                 }
             });
         });
+    }
+
+    ValidateData(req) {
+        let promise = new Promise((resolve, reject) => {
+            const result = validationResult(req);
+            if (result) {
+                if (result.isEmpty()) {
+                    resolve(result);
+                }
+                else {
+                    result.errors.forEach(error => errorMessages.push(error.msg));
+
+                    req.flash('errors', errorMessages);
+                    reject(errorMessages);
+                }
+            }
+            else {
+                reject(['Something went wrong!']);
+            }
+        });
+        return promise;
     }
 }

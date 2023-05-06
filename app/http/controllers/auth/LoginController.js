@@ -1,8 +1,6 @@
 const Controller = require('app/http/controllers/Controller');
 const passport = require('passport');
 
-let errorMessages = [];
-
 
 class LoginController extends Controller {
     ShowLoginForm(req, res) {
@@ -13,19 +11,21 @@ class LoginController extends Controller {
         });
     }
 
-    LoginProcess(req, res, next, validationResult) {
+    CheckLoginProcess(req, res, next) {
         this.ValidateCaptcha(req).then(() => {
-        this.ValidateLogin(req, validationResult).then(() => {
-            this.Login(req, res, next);
-        }).catch((errors) => {
+        this.ValidateData(req).then(() => {
+            this.DoLogin(req, res, next);
+        }).catch((error) => {
+            console.log(error);
             res.redirect(req.url);
         });
         }).catch((error) => {
+            console.log(error);
             res.redirect(req.url);
         });
     }
 
-    Login(req, res, next) {
+    DoLogin(req, res, next) {
         passport.authenticate('local.login', (err , user) => {
             if(user) {
                 if(req.body.remember) {
@@ -47,33 +47,14 @@ class LoginController extends Controller {
         })(req , res , next);
     }
 
-    UserLoginRules(body) {
-        return [
-            body('email').notEmpty().withMessage(this.lang.email_empty),
-            body('email').isEmail().withMessage(this.lang.email_invalid),
-            body('password').notEmpty().withMessage(this.lang.password_empty)
-        ]
-    }
-
-    ValidateLogin(req, validationResult) {
-        let promise = new Promise((resolve, reject) => {
-            const result = validationResult(req);
-            if (result) {
-                if (result.isEmpty()) {
-                    resolve(result);
-                }
-                else {
-                    result.errors.forEach(error => errorMessages.push(error.msg));
-
-                    req.flash('errors', errorMessages);
-                    reject(errorMessages);
-                }
+    DoLogout(req , res) {
+        req.logOut((err) => {
+            if(err) {
+                return next(err);
             }
-            else {
-                reject(['Something went wrong!']);
-            }
+            res.clearCookie('remember_token');
+            res.redirect('/');
         });
-        return promise;
     }
 }
 

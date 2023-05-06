@@ -5,30 +5,29 @@ const router = express.Router();
 const homeController = require('app/http/controllers/HomeController');
 const loginController = require('app/http/controllers/auth/LoginController');
 const registerController = require('app/http/controllers/auth/RegisterController');
-const { body, validationResult } = require('express-validator');
+
+// Home middlewares
 const RedirectIfAuthenticated = require('app/http/middleware/RedirectIfAuthenticated');
+
+// Home validators
+const registerValidator = require('app/http/validators/RegisterValidator');
+const loginValidator = require('app/http/validators/LoginValidator');
 
 
 // Home routes
 
 router.get('/', homeController.index);
+
 router.get('/login', RedirectIfAuthenticated.Handle , loginController.ShowLoginForm);
-router.post('/login' , [RedirectIfAuthenticated.Handle , loginController.UserLoginRules(body)] , (req , res , next) => {
-    loginController.LoginProcess(req , res , next , validationResult);
-});
+router.post('/login' , [RedirectIfAuthenticated.Handle , loginValidator.Handle()] , (req , res , next) => 
+    loginController.CheckLoginProcess(req , res , next));
+
 router.get('/register', RedirectIfAuthenticated.Handle , registerController.ShowRegisterationForm);
-router.post('/register', [RedirectIfAuthenticated.Handle , registerController.UserRegisterationRules(body)] , (req , res , next) => {
-    registerController.RegisterProcess(req , res , next , validationResult);
-});
+router.post('/register', [RedirectIfAuthenticated.Handle , registerValidator.Handle()] , (req , res , next) =>
+    registerController.CheckRegisterProcess(req , res , next));
 
 router.get('/logout' , (req , res , next) => {
-    req.logOut((err) => {
-        if(err) {
-            return next(err);
-        }
-        res.clearCookie('remember_token');
-        res.redirect('/');
-    });
+    loginController.DoLogout(req , res);
 });
 
 
