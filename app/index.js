@@ -1,11 +1,8 @@
-require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -23,27 +20,25 @@ module.exports = class Aplication {
 
     SetupExpress() {
         const server = http.createServer(app);
-        server.listen(3000, () => console.log('Server is listening on port 3000.'));
+        server.listen(config.port, () => console.log(`Server is listening on port ${config.port}.`));
+    }
+
+    SetMongoConnection() {
+        mongoose.connect(config.database.url);
     }
 
     SetConfig() {
-        mongoose.connect(process.env.MONGO_URL);
+        this.SetMongoConnection();
         require('app/passport/passport-local');
-        app.use(express.static('public'));
-        app.set('view engine', 'ejs');
-        app.set('views', path.resolve('resource/views'));
+        app.use(express.static(config.layout.public_dir));
+        app.set('view engine', config.layout.view_engine);
+        app.set('views', config.layout.views_dir);
+
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
-        app.use(session({
-            secret: process.env.COOKIE_SECRET_KEY,
-            resave: true,
-            cookie: {
-                expires: new Date(Date.now() + parseInt(process.env.SESSION_EXPIRE))
-            },
-            saveUninitialized: true,
-            store: MongoStore.create({mongoUrl: process.env.MONGO_URL})
-        }));
-        app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
+
+        app.use(session({...config.session}));
+        app.use(cookieParser(config.cookie_secret_key));
         app.use(flash());
         app.use(passport.initialize());
         app.use(passport.session());
