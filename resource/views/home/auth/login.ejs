@@ -5,7 +5,7 @@
                 <h5>ورود به سایت</h5>
             </div>
             <div class="card-body">
-                <form action="/login" class="form-horizontal" method="POST" novalidate>
+                <form action="/auth/login" class="form-horizontal" method="POST" novalidate>
                     <%- include('./../layouts/errors') -%>
                         <div class="col-12 mb-2">
                             <label for="email" class="form-label">آدرس ایمیل</label>
@@ -35,7 +35,7 @@
                             <a href="#" class="btn btn-danger">
                                 ورود با اکانت گوگل
                             </a>
-                            <a href="#" class="btn btn-link">
+                            <a href="/login/google" class="btn btn-link">
                                 رمز عبور را فراموش کرده‌ام
                             </a>
                         </div>

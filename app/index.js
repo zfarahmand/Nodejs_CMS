@@ -16,7 +16,7 @@ module.exports = class Aplication {
         this.SetupExpress();
         this.SetConfig();
         this.SetRouters();
-    }
+    } 
 
     SetupExpress() {
         const server = http.createServer(app);

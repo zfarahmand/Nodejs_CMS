@@ -2,7 +2,6 @@ const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 
 const User = require('app/models/User');
-const lang = require('lang/fa.json');
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -23,7 +22,7 @@ passport.use('local.register', new localStrategy({
     User.findOne({ 'email': email })
         .then((user) => {
             if (user) {
-                return done(null, false, req.flash('errors', [lang.email_exists]));
+                return done(null, false, req.flash('errors', [config.lang.email_exists]));
             }
             else {
                 const newUser = new User({
@@ -35,7 +34,7 @@ passport.use('local.register', new localStrategy({
                     return done(null, newUser);
                 })
                     .catch((err) => {
-                        return done(err, false, req.flash('errors', [lang.register_error]));
+                        return done(err, false, req.flash('errors', [config.lang.register_error]));
                     });
             }
         })
@@ -53,13 +52,13 @@ passport.use('local.login', new localStrategy({
     User.findOne({ 'email': email })
         .then(async (user) => {
             if (!user || ! await user.comparePasswords(password)) {
-                return done(null, false, req.flash('errors', [lang.user_invalid]));
+                return done(null, false, req.flash('errors', [config.lang.user_invalid]));
             }
             else {
                 return done(null, user);
             }
         })
         .catch((err) => {
-            return done(err, false, req.flash('errors', [lang.login_error]));
+            return done(err, false, req.flash('errors', [config.lang.login_error]));
         })
 }));

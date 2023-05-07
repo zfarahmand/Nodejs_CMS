@@ -40,12 +40,12 @@ class LoginController extends Controller {
                         return res.redirect('/');
                     }
                     else {
-                        return res.redirect('/login')
+                        return res.redirect('/auth/login')
                     }
                 });
             }
             else {
-                return res.redirect('/login');
+                return res.redirect('/auth/login');
             }
         })(req , res , next);
     }
