@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 // Home controllers
 const loginController = require('app/http/controllers/auth/LoginController');
@@ -19,6 +20,12 @@ router.post('/login' , loginValidator.Handle() , (req , res , next) =>
 router.get('/register', registerController.ShowRegisterationForm);
 router.post('/register', registerValidator.Handle() , (req , res , next) =>
     registerController.CheckRegisterProcess(req , res , next));
+
+router.get('/google' , passport.authenticate('google' , { scope: ['profile' , 'email'] }));
+router.get('/google/callback' , passport.authenticate('google' , {
+    successRedirect: '/',
+    failureRedirect: '/auth/register',
+}));
 
 
 module.exports = router;

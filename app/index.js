@@ -30,6 +30,7 @@ module.exports = class Aplication {
     SetConfig() {
         this.SetMongoConnection();
         require('app/passport/passport-local');
+        require('app/passport/passport-google');
 
         app.use(config.layout.ejs.expressLayouts);
         app.set('layout extractScripts' , config.layout.ejs.extractScripts);
