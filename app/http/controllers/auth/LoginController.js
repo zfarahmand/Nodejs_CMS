@@ -20,11 +20,11 @@ class LoginController extends Controller {
             this.DoLogin(req, res, next);
         }).catch((error) => {
             console.log(error);
-            res.redirect(req.url);
+            res.redirect(req.originalUrl);
         });
         }).catch((error) => {
             console.log(error);
-            res.redirect(req.url);
+            res.redirect(req.originalUrl);
         });
     }
 
@@ -40,12 +40,12 @@ class LoginController extends Controller {
                         return res.redirect('/');
                     }
                     else {
-                        return res.redirect('/auth/login')
+                        return res.redirect(req.originalUrl)
                     }
                 });
             }
             else {
-                return res.redirect('/auth/login');
+                return res.redirect(req.originalUrl);
             }
         })(req , res , next);
     }
