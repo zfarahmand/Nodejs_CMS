@@ -8,6 +8,7 @@ module.exports = {
     session,
     layout,
     service,
+    title: 'مجله آموزشی گیگاکد',
     lang: require('lang/' + process.env.APP_LANG + '.json') ?? require('lang/fa.json'),
     port: process.env.APP_PORT,
     cookie_secret_key: process.env.COOKIE_SECRET_KEY

@@ -4,7 +4,10 @@ const passport = require('passport');
 class RegisterController extends Controller {
 
     ShowRegisterationForm(req, res) {
-        res.render('auth/register', {
+        const title = 'صفحه عضویت';
+        
+        res.render('home/auth/register', {
+            title,
             errors: req.flash('errors'),
             displayTag: this.displayTag,
             captchaDisplayDOM: this.captchaDisplayDOM,

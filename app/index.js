@@ -30,6 +30,11 @@ module.exports = class Aplication {
     SetConfig() {
         this.SetMongoConnection();
         require('app/passport/passport-local');
+
+        app.use(config.layout.ejs.expressLayouts);
+        app.set('layout extractScripts' , config.layout.ejs.extractScripts);
+        app.set('layout extractStyles' , config.layout.ejs.extractStyles);
+        app.set('layout' , config.layout.ejs.layoutPage);
         app.use(express.static(config.layout.public_dir));
         app.set('view engine', config.layout.view_engine);
         app.set('views', config.layout.views_dir);
