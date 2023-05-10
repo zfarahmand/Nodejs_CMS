@@ -5,24 +5,29 @@ const passport = require('passport');
 // Home controllers
 const loginController = require('app/http/controllers/auth/LoginController');
 const registerController = require('app/http/controllers/auth/RegisterController');
+const forgetPassController = require('app/http/controllers/auth/ForgetPassController');
 
 // Auth validators
 const registerValidator = require('app/http/validators/RegisterValidator');
 const loginValidator = require('app/http/validators/LoginValidator');
+const passResetValidator = require('app/http/validators/PassResetValidator');
 
 
 // Auth routes
 
 router.get('/login', loginController.ShowLoginForm);
-router.post('/login' , loginValidator.Handle() , (req , res , next) => 
-    loginController.CheckLoginProcess(req , res , next));
+router.post('/login', loginValidator.Handle(), (req, res, next) =>
+    loginController.CheckLoginProcess(req, res, next));
 
 router.get('/register', registerController.ShowRegisterationForm);
-router.post('/register', registerValidator.Handle() , (req , res , next) =>
-    registerController.CheckRegisterProcess(req , res , next));
+router.post('/register', registerValidator.Handle(), (req, res, next) =>
+    registerController.CheckRegisterProcess(req, res, next));
 
-router.get('/google' , passport.authenticate('google' , { scope: ['profile' , 'email'] }));
-router.get('/google/callback' , passport.authenticate('google' , {
+router.get('/password/email', forgetPassController.ShowForgetPassForm);
+router.post('/password/email', passResetValidator.Handle(), forgetPassController.SendPassResetLink);
+
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', passport.authenticate('google', {
     successRedirect: '/',
     failureRedirect: '/auth/register',
 }));

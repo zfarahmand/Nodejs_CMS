@@ -1,6 +1,8 @@
 const autoBind = require('auto-bind');
 const { validationResult } = require('express-validator');
 const arcaptcha = require('arcaptcha-nodejs');
+const NodeMailer = require('app/mail/NodeMailer');
+const GetHTMLTemplate = require('app/mail/Template');
 
 let errorMessages = [];
 
@@ -16,16 +18,16 @@ module.exports = class Controller {
     ValidateCaptcha(req) {
         return new Promise((resolve, reject) => {
             arcaptcha.verify(config.service.arcaptcha.secret_key, config.service.arcaptcha.site_key, req.body['arcaptcha-token'])
-            .then((data) => {
-                if (data === true || data.success) {
-                    resolve(true);
-                }
-                else {
-                    const error = this.lang.captcha_invalid;
-                    req.flash('errors', [error]);
-                    reject(error);
-                }
-            });
+                .then((data) => {
+                    if (data === true || data.success) {
+                        resolve(true);
+                    }
+                    else {
+                        const error = this.lang.captcha_invalid;
+                        req.flash('errors', [error]);
+                        reject(error);
+                    }
+                });
         });
     }
 
@@ -48,5 +50,24 @@ module.exports = class Controller {
             }
         });
         return promise;
+    }
+
+    SendEmail(email, subject, text) {
+        const nodemailer = new NodeMailer(false);
+        const options = {
+            from: config.mail.user.from,
+            to: email,
+            subject,
+            text,
+            html: GetHTMLTemplate(text , subject),
+        }
+
+        nodemailer.SendMail(options, (info) => {
+            console.log("Email sent successfully");
+        });
+    }
+
+    Back(req, res) {
+        return res.redirect(req.header('Referer') || '/');
     }
 }
