@@ -10,5 +10,4 @@ const passwordResetSchema = new mongoose.Schema({
 
 
 
-
 module.exports = new mongoose.model('Password_Reset' , passwordResetSchema);

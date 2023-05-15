@@ -39,6 +39,7 @@ module.exports = class Controller {
                     resolve(result);
                 }
                 else {
+                    errorMessages = [];
                     result.errors.forEach(error => errorMessages.push(error.msg));
 
                     req.flash('errors', errorMessages);
@@ -65,6 +66,20 @@ module.exports = class Controller {
         nodemailer.SendMail(options, (info) => {
             console.log("Email sent successfully");
         });
+    }
+
+    CheckAuthProcess(req, res, next, callback) {
+        // this.ValidateCaptcha(req).then(() => {
+            this.ValidateData(req).then(() => {
+                callback(req, res, next);
+            }).catch((error) => {
+                console.log(error);
+                res.redirect(req.originalUrl);
+            });
+        // }).catch((error) => {
+        //     console.log(error);
+        //     res.redirect(req.originalUrl);
+        // });
     }
 
     Back(req, res) {

@@ -14,20 +14,6 @@ class RegisterController extends Controller {
         });
     }
 
-    CheckRegisterProcess(req, res, next) {
-        this.ValidateCaptcha(req).then(() => {
-            this.ValidateData(req).then(() => {
-                this.DoRegister(req , res, next);
-            }).catch((error) => {
-                console.log(error);
-                res.redirect(req.url);
-            });
-        }).catch((error) => {
-            console.log(error);
-            res.redirect(req.url);
-        });
-    }
-
     DoRegister(req , res , next) {
         passport.authenticate('local.register' , {
             successRedirect: '/',

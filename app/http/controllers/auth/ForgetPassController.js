@@ -1,10 +1,9 @@
 const Controller = require('app/http/controllers/Controller');
-const passport = require('passport');
 const PasswordReset = require('app/models/PasswordReset');
 const User = require('app/models/User');
 const uniqueString = require('unique-string');
 
-class LoginController extends Controller {
+class ForgetPassController extends Controller {
     ShowForgetPassForm(req, res) {
         const title = 'فراموشی رمز عبور';
 
@@ -13,20 +12,6 @@ class LoginController extends Controller {
             errors: req.flash('errors'),
             displayTag: this.displayTag,
             captchaDisplayDOM: this.captchaDisplayDOM,
-        });
-    }
-
-    async SendPassResetLink(req, res, next) {
-        this.ValidateCaptcha(req).then(() => {
-            this.ValidateData(req).then(() => {
-                this.SendResetLink(req, res, next);
-            }).catch((error) => {
-                console.log(error);
-                res.redirect(req.originalUrl);
-            });
-        }).catch((error) => {
-            console.log(error);
-            res.redirect(req.originalUrl);
         });
     }
 
@@ -41,14 +26,13 @@ class LoginController extends Controller {
             }
 
             const token = uniqueString();
-
             const newPassReset = new PasswordReset({
                 email: email,
                 token: token,
             });
 
             newPassReset.save().then(() => {
-                const message = `<a href='${config.protocol}://${req.headers.host}/password/reset/${token}'>${config.protocol}://${req.headers.host}/password/reset/${token}</a>`;
+                const message = `<a href='${config.protocol}://${req.headers.host}/auth/password/reset/${token}'>${config.protocol}://${req.headers.host}/password/reset/${token}</a>`;
                 this.SendEmail(email , config.lang.pass_reset_email_subject , message);
 
                 // req.flash('success' , [config.lang.pass_reset_success]);
@@ -62,4 +46,4 @@ class LoginController extends Controller {
     }
 }
 
-module.exports = new LoginController();
+module.exports = new ForgetPassController();

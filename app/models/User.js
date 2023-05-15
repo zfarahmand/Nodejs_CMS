@@ -19,6 +19,15 @@ userSchema.pre('save' , function(next){
     }).catch(err => console.log(err));
 });
 
+userSchema.pre('findOneAndUpdate' , function(next){
+    bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS)).then((salt) => {
+        bcrypt.hash(this.getUpdate().password, salt).then((hash) => {
+            this.getUpdate().password = hash;
+            next();
+        }).catch(err => console.log(err));
+    }).catch(err => console.log(err));
+});
+
 userSchema.methods.comparePasswords = function(password){
     return bcrypt.compare(password , this.password);
 }

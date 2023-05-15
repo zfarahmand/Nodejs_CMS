@@ -1,0 +1,40 @@
+<div class="row pt-5 justify-content-center">
+    <div class="col-8">
+        <div class="card card-default">
+            <div class="card-header">
+                <h5>تغییر رمز عبور</h5>
+            </div>
+            <div class="card-body">
+                <form action="/auth/password/reset/<%= token %>" class="form-horizontal" method="POST" novalidate>
+                    <%- include('./../../layouts/errors') -%>
+
+                        <div class="col-12 mb-2">
+                            <label for="email" class="form-label">آدرس ایمیل</label>
+                            <input type="email" id="email" class="form-control" name="email" value="" required
+                                autofocus>
+                        </div>
+
+                        <div class="col-12 mb-2">
+                            <label for="password" class="form-label">رمز عبور جدید</label>
+                            <input type="password" id="password" class="form-control" name="password" required>
+                        </div>
+
+                        <div class="col-12 mb-2">
+                            <label for="confirm" class="form-label">تایید رمز عبور جدید</label>
+                            <input type="password" id="confirm" class="form-control" name="confirm" required>
+                        </div>
+
+                        <div class="col-12 mb-2">
+                            <%- captchaDisplayDOM %>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-primary">تایید رمز عبور</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- displayTag %>

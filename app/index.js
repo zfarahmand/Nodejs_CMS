@@ -40,6 +40,7 @@ module.exports = class Aplication {
         app.set('view engine', config.layout.view_engine);
         app.set('views', config.layout.views_dir);
 
+
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
 

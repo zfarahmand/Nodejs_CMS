@@ -14,20 +14,6 @@ class LoginController extends Controller {
         });
     }
 
-    CheckLoginProcess(req, res, next) {
-        this.ValidateCaptcha(req).then(() => {
-        this.ValidateData(req).then(() => {
-            this.DoLogin(req, res, next);
-        }).catch((error) => {
-            console.log(error);
-            res.redirect(req.originalUrl);
-        });
-        }).catch((error) => {
-            console.log(error);
-            res.redirect(req.originalUrl);
-        });
-    }
-
     DoLogin(req, res, next) {
         passport.authenticate('local.login', (err , user) => {
             if(user) {
