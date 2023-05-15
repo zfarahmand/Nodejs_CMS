@@ -69,17 +69,17 @@ module.exports = class Controller {
     }
 
     CheckAuthProcess(req, res, next, callback) {
-        // this.ValidateCaptcha(req).then(() => {
+        this.ValidateCaptcha(req).then(() => {
             this.ValidateData(req).then(() => {
                 callback(req, res, next);
             }).catch((error) => {
                 console.log(error);
                 res.redirect(req.originalUrl);
             });
-        // }).catch((error) => {
-        //     console.log(error);
-        //     res.redirect(req.originalUrl);
-        // });
+        }).catch((error) => {
+            console.log(error);
+            res.redirect(req.originalUrl);
+        });
     }
 
     Back(req, res) {
